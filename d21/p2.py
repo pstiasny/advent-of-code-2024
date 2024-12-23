@@ -1,29 +1,18 @@
 #!/usr/bin/env python
 
 import fileinput
-from math import inf
-from sys import argv, stdin
 import heapq
-import string
-from pprint import pprint
-from collections import deque
-
-# N = int(argv[1])
-# argv.pop(1)
 
 LD = ''' ^A
 <v>'''.splitlines()
 PD = {}
 for i,l in enumerate(LD):
     for j,c in enumerate(l):
-        # PD[i,j]=c
         PD[c]=(i,j)
 
 CDs = [{} for _ in range(26)]
 for a,(ai,aj) in PD.items():
     for b,(bi,bj) in PD.items():
-        # CD[a,b] = 2*(abs(ai-bi)+abs(aj-bj)) + 1
-        # CD[a,b] = abs(ai-bi)+abs(aj-bj)+1
         CDs[0][a,b] = 1
 
 
@@ -34,14 +23,14 @@ LN = '''789
 PN = {}
 for i,l in enumerate(LN):
     for j,c in enumerate(l):
-        # PN[i,j]=c
         PN[c] = (i,j)
 
 CN = {}
 
 for CA, CB, P, A in [(cd1, cd2, PD, LD) for (cd1, cd2) in zip(CDs[0:25], CDs[1:26])] +  [(CDs[25], CN, PN, LN)]:
     iblank, jblank = P[' ']
-    def opt(a, i, j):
+    for a,(i,j) in P.items():
+        if a == ' ': continue
         q = [(0, i, j, 'A')]
         vis = set()
         CB[a, a] = CA['A', 'A']
@@ -65,11 +54,6 @@ for CA, CB, P, A in [(cd1, cd2, PD, LD) for (cd1, cd2) in zip(CDs[0:25], CDs[1:2
                     continue
                 nd = d + CA[di, ndi]
                 heapq.heappush(q, (nd, k,l, ndi))
-
-    for a,(ai,aj) in P.items():
-        if a == ' ': continue
-        opt(a, ai, aj)
-
 
 
 t = 0
